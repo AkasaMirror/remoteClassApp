@@ -4,12 +4,15 @@
   "scripts": {
     "dev": "parcel ./src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build" : "npx parcel build ./src/index.html"
+    "build": "npx parcel build ./src/index.html"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@skyway-sdk/room": "^1.6.1"
+    "@skyway-sdk/core": "^1.6.1",
+    "@skyway-sdk/room": "^1.6.1",
+    "@skyway-sdk/sfu-bot": "^1.6.1",
+    "@skyway-sdk/token": "^1.4.5"
   },
   "devDependencies": {
     "buffer": "^6.0.3",

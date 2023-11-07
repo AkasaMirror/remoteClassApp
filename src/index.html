@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -7,6 +7,7 @@
   </head>
   <body>
     <p>ID: <span id="my-id"></span></p>
+    <div id="disable-area"></div>
     <div>
       room name: <input id="room-name" type="text" />
       <button id="join">join</button>
@@ -16,4 +17,36 @@
     <div id="remote-media-area"></div>
     <script type="module" src="main.js"></script>
   </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>SkyWay Tutorial</title>
+  </head>
+  <body>
+    <p>ID: <span id="my-id"></span></p>
+    <div id="disable-area"></div>
+    <div>
+      room name: <input id="room-name" type="text" />
+      <div id="room-button-area">
+        <button id="join">join</button>
+      </div>
+      <div>
+        <button id="unpublish-video">unpublish video</button>
+        <button id="unpublish-audio">unpublish audio</button>
+      </div>
+      <div>
+        <button id="videoButton">video off</button>
+        <button id="audioButton">audio off</button>
+      </div>
+    </div>
+    <video id="local-video" width="400px" muted playsinline></video>
+    <div id="button-area"></div>
+    <div id="remote-media-area"></div>
+    <script type="module" src="index.js"></script>
+  </body>
 </html>
+
