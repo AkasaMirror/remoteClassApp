@@ -394,14 +394,30 @@ const token = new SkyWayAuthToken({
         const mediaOn = "video on";
         const mediaOff = "video off";
         if(my_video_on) {
-            video.detach(localVideo); // 3
-            videoButton.textContent = mediaOff;
-            my_video_on = false; 
-        } else {
-            video.attach(localVideo); // 3
-            await localVideo.play();
+
+            console.log("videoをdetachします。");
+            video.detach();
+            console.log("videoをdetachしました。");
+
+            console.log("videoをreleaseします。");
+            video.release();
+            console.log("videoをrelaeseしました。");
+            
+            console.log(videoButton.textContent + "の処理を行いました。");
             videoButton.textContent = mediaOn;
-            my_video_on = true; 
+            my_video_on = false;
+            
+        } else {
+
+            console.log("videoをattachします。");
+            video.attach(localVideo); // 3
+            console.log("videoをattachしました。");
+            
+            await localVideo.play();
+            console.log(videoButton.textContent + "の処理を行いました。");
+            videoButton.textContent = mediaOff;
+            my_video_on = true;
+            
         }
         console.log(videoButton.textContent + "の処理を行いました。");
     }
