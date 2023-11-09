@@ -48,13 +48,12 @@ const token = new SkyWayAuthToken({
 }).encode('S6MaSxEOJoQlM9JnfgowvhVbdsWIV9bz4WKW7fsftzc=');
 
 (async () => {
-    // 1
     const localVideo = document.getElementById('local-video');
     const buttonArea = document.getElementById('button-area');
     const roomButtonArea = document.getElementById('room-button-area');
     const remoteMediaArea = document.getElementById('remote-media-area');
     const roomNameInput = document.getElementById('room-name');
-
+  
     const myId = document.getElementById('my-id');
     const joinButton = document.getElementById('join');
 
@@ -72,8 +71,12 @@ const token = new SkyWayAuthToken({
     let my_audio_on = true;
 
     if(my_video_on) {
+        console.log("local videoを実行する。");
         video.attach(localVideo); // 3
         await localVideo.play(); // 4
+        console.log("local videoを実行しました。");
+    } else {
+        console.log("local videoが作動されませんでした。");
     }
 
     // トークンからコンテクストを作成する。
@@ -81,54 +84,20 @@ const token = new SkyWayAuthToken({
     // また、roomnameが入力されていない場合は先に進めないので処理を組み込む
     joinButton.onclick = async () => {
         console.log("joinボタンが押されました。");
-        if (roomNameInput.value === '') return;
-        
+        if (roomNameInput.value === '') {
+            console.log("room名が入力されていません。");
+            return;
+        }
+    
         const context = await SkyWayContext.Create(token);
-
-        //トークンの自動更新
-        context.onTokenUpdateReminder.add(() => {
-            context.updateAuthToken(tokenString);
-        });
-
-        // 以下の関数はroomをフェッチしてくるか作成する関数
         const room = await SkyWayRoom.FindOrCreate(context, {
-            type: 'p2p', // ここにはsfuかp2pを入れることで通信形式を決定することができる
+            type: 'p2p',
             name: roomNameInput.value,
         });
-
-        if(room){
-            console.log("roomが入っている。");
-        } else {
-            console.log("roomが入っていない。")
-        }
-
-        // 作成、見つけてきたroomに入室する処理を加える。
         const member = await room.join();
-
-        const exitButton = document.createElement('button');
-        exitButton.textContent = "exit";
-        roomButtonArea.appendChild(exitButton);
-        exitButton.onclick = async () => {
-            console.log("exitボタンが押されました。");
-            member.leave();
-            console.log("exit処理が正常に実行されました。");
-        }
-        const closeButton = document.createElement('button');
-        closeButton.textContent = "close";
-        roomButtonArea.appendChild(closeButton);
-        closeButton.onclick = async () => {
-            console.log("closeボタンが押されました。");
-            room.close();
-            if(room){
-                console.log("room : " + room);
-                console.log("closeが正常に終了していません。");
-            } else {
-                console.log("closeが正常に実行されました。")
-            }
-        }
-
         myId.textContent = member.id;
-        // publishする項目を選択する事で、自分の映像や音声を送信することができる。
+
+        console.log("publishを試みます。");
         await member.publish(audio);
         await member.publish(video, {
             encodings: [
@@ -138,93 +107,81 @@ const token = new SkyWayAuthToken({
             ],
             maxSubscribers : 99,
         });
-        let unVideo = document.getElementById("unpublish-video");
-        let unAudio = document.getElementById("unpublish-audio");
-        unVideo.onclick = async() => {
-            console.log("videoのunpublishを試みました。");
-            member.unpublish(video);
-            console.log("videoのunpublishを実行しました。");
-        }
+        console.log("publish正常に実行されました。");
 
-        unAudio.onclick = async() => {
-            console.log("audioのunpublishを試みました。");
-            member.unpublish(audio);
-            console.log("audioのunpublishを実行しました。");
-        }
-        console.log("publish完了");
+        const createExitandCloseButton = () => {
+            console.log("createExitandCloseButton()を実行します。");
 
+            const exitButton = document.createElement("button");
+            const closeButton = document.createElement("button");
 
+            exitButton.textContent = "exit";
+            closeButton.textContent = "close";
+
+            roomButtonArea.appendChild(exitButton);
+            roomButtonArea.appendChild(closeButton);
+
+            exitButton.onclick = async () => {
+                console.log("exitボタンが押されました");
+                console.log("room-member : " + room.members);
+                member.leave();
+                console.log("exit処理が正常に実行されました。");
+                exitButton.remove();
+                closeButton.remove();
+                console.log("ボタンを削除しました。");
+                console.log("room-member : " + room.members);
+            }
         
 
-        // 相手の映像と音声のsubscribeを行う。
-        // roomのpublicationsプロパティにroomに入っているpublicationプロパティが入っている。
+            closeButton.onclick = async () => {
+                console.log("closeボタンが押されました");
+                console.log("room-member : " + room.members);
+                member.leave();
+                console.log("close処理が正常に実行されました。");
+                exitButton.remove();
+                closeButton.remove();
+                console.log("ボタンを削除しました。");
+                console.log("room-member : " + room.members);
+            }
+
+            console.log("createExitandCloseButton()が実行されました。");
+        }
+        createExitandCloseButton();
+
+    
         const subscribeAndAttach = (publication) => {
-            // 3
-            // 自分がpublishした場合ではない場合に限り先に進める。
             if (publication.publisher.id === member.id) return;
-
-
-            // ボタンエリアに追加するボタンを作成する。
-            const subscribeButton = document.createElement('button'); // 3-1
-            const deleteButton = document.createElement('button');
-            subscribeButton.textContent = `subscribe ${publication.publisher.id}: ${publication.contentType}`;
-            deleteButton.textContent = `delete ${publication.publisher.id}: ${publication.contentType}`;
+    
+            const subscribeButton = document.createElement('button');
+            subscribeButton.textContent = `${publication.publisher.id}: ${publication.contentType}`;
             buttonArea.appendChild(subscribeButton);
-            buttonArea.appendChild(deleteButton);
-
-            //ボタンへのイベント設定を行なう
+    
             subscribeButton.onclick = async () => {
-                // 3-2
-                // publicationをsubscribeすると、streamが返される。
-                const { stream } = await member.subscribe(publication.id); // 3-2-1
-            
-                let newMedia; // 3-2-2
-                
-                // 返されたstreamの種類で処理を変える。
+                const { stream } = await member.subscribe(publication.id);
+        
+                let newMedia;
                 switch (stream.track.kind) {
                     case 'video':
                         newMedia = document.createElement('video');
                         newMedia.playsInline = true;
                         newMedia.autoplay = true;
-                        deleteButton.onclick = async () => {
-                            newMedia.playsInline = false;
-                            newMedia.autoplay = false;
-                        }
                         break;
                     case 'audio':
                         newMedia = document.createElement('audio');
                         newMedia.controls = true;
                         newMedia.autoplay = true;
-                        deleteButton.onclick = async () => {
-                            newMedia.controls = false;
-                            newMedia.autoplay = false;
-                        }
                         break;
                     default:
                         return;
                 }
-                stream.attach(newMedia); // 3-2-3
-                // 他のひとのstream見える状態にする。
+                stream.attach(newMedia);
                 remoteMediaArea.appendChild(newMedia);
             };
-
-
         };
-      
-        //room.publicationsの要素を一つずつ取得して引数の関数に渡してあげる。
-        room.publications.forEach(subscribeAndAttach); // 1
-        
-        
-        // 誰かがpublishするたびにコールバック関数が実行される。
-        room.onStreamPublished.add((e) => {
-            // 2
-            subscribeAndAttach(e.publication);
-        });
-    }
     
-
-
-
+        room.publications.forEach(subscribeAndAttach);
+        room.onStreamPublished.add((e) => subscribeAndAttach(e.publication));
+    };
 
     videoButton.onclick = async () => {
         console.log(videoButton.textContent + "が押されました。");
@@ -257,6 +214,7 @@ const token = new SkyWayAuthToken({
         console.log(audioButton.textContent + "の処理を行いました。");
     }
 
-})(); // 1
+})();
+
 
 
