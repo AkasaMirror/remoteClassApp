@@ -51,8 +51,11 @@ const token = new SkyWayAuthToken({
     const localVideo = document.getElementById('local-video');
     const buttonArea = document.getElementById('button-area');
     const roomButtonArea = document.getElementById('room-button-area');
+    const unpublicationArea = document.getElementById('unpublication-area');
+    const roomInformationArea = document.getElementById('room-information-area');
     const remoteMediaArea = document.getElementById('remote-media-area');
     const roomNameInput = document.getElementById('room-name');
+    
   
     const myId = document.getElementById('my-id');
     const joinButton = document.getElementById('join');
@@ -83,7 +86,9 @@ const token = new SkyWayAuthToken({
     // コンテクストには認証や認可ログの設定などの情報が格納されている。
     // また、roomnameが入力されていない場合は先に進めないので処理を組み込む
     joinButton.onclick = async () => {
+        
         console.log("joinボタンが押されました。");
+
         if (roomNameInput.value === '') {
             console.log("room名が入力されていません。");
             return;
@@ -94,10 +99,12 @@ const token = new SkyWayAuthToken({
             type: 'p2p',
             name: roomNameInput.value,
         });
+
         const member = await room.join();
         myId.textContent = member.id;
 
         console.log("publishを試みます。");
+
         await member.publish(audio);
         await member.publish(video, {
             encodings: [
@@ -123,13 +130,11 @@ const token = new SkyWayAuthToken({
 
             exitButton.onclick = async () => {
                 console.log("exitボタンが押されました");
-                console.log("room-member : " + room.members);
                 member.leave();
                 console.log("exit処理が正常に実行されました。");
                 exitButton.remove();
                 closeButton.remove();
                 console.log("ボタンを削除しました。");
-                console.log("room-member : " + room.members);
             }
         
 
@@ -146,9 +151,117 @@ const token = new SkyWayAuthToken({
 
             console.log("createExitandCloseButton()が実行されました。");
         }
-        createExitandCloseButton();
 
-    
+        const createRoomInformationButton = () => {
+            console.log("createRoomInformationButton()を実行します。");
+            if(roomInformationArea.firstChild) {
+                console.log("先に生成された子ノードを削除します");
+
+                while (roomInformationArea.firstChild) {
+                    console.log(roomInformationArea.firstChild)
+                    roomInformationArea.removeChild(roomInformationArea.firstChild);
+                }
+                console.log("先に生成された子ノードを削除しました");
+            }
+            const publicationsButton = document.createElement("button");
+            const subscriptionsButton = document.createElement("button");
+            const roomMemberButton = document.createElement("button");
+
+            publicationsButton.textContent = "publications";
+            subscriptionsButton.textContent = "subscriptions";
+            roomMemberButton.textContent = "room members";
+
+            roomInformationArea.appendChild(publicationsButton);
+            roomInformationArea.appendChild(subscriptionsButton);
+            roomInformationArea.appendChild(roomMemberButton);
+
+            publicationsButton.onclick = async () => {
+                console.log("publicationsボタンが押されました。");
+                Object.keys(room.publications).forEach(function (key) {
+                    console.log("room_publications :" + JSON.stringify(room.publications[key]));
+                });
+                console.log("publicationsボタンが正常に実行されました。");
+            }
+
+            subscriptionsButton.onclick = async () => {
+                console.log("subscriptionsボタンが押されました。");
+                Object.keys(room.subscriptions).forEach(function (key) {
+                    console.log("room_subscriptions :" + JSON.stringify(room.subscriptions[key]));
+                });
+                console.log("subscriptionsボタンが正常に実行されました。");
+            }
+
+            roomMemberButton.onclick = async () => {
+                console.log("room membersボタンが押されました。");
+                Object.keys(room.members).forEach(function (key) {
+                    console.log("room members :" + JSON.stringify(room.members[key]));
+                });
+                console.log("room membersボタンが正常に実行されました。");
+            }
+            console.log("createRoomInformationButton()が実行されました。");
+        }
+
+        const createUnpublicationButton = () => {
+            console.log("createUnpublishButton()を実行します。");
+            
+            if(unpublicationArea.firstChild) {
+                console.log("先に生成された子ノードを削除します");
+
+                while (unpublicationArea.firstChild) {
+                    console.log(unpublicationArea.firstChild)
+                    roomInformationArea.removeChild(unpublicationArea.firstChild);
+                }
+                console.log("先に生成された子ノードを削除しました");
+            }
+            const unpublishAudioButton = document.createElement('button');
+            const unpublishVideoButton = document.createElement('button');
+
+            unpublishAudioButton.textContent = "unpublish audio";
+            unpublishVideoButton.textContent = "unpublish video";
+
+            unpublicationArea.appendChild(unpublishAudioButton);
+            unpublicationArea.appendChild(unpublishVideoButton);
+
+            unpublishAudioButton.onclick = async () => {
+                console.log("unpublishAudio()が実行されます");
+                member.unpublish(audio);
+                console.log("unpublishAudio()が実行されました");
+            }
+
+            unpublishVideoButton.onclick = async () => {
+                console.log("unpublishVideo()が実行されます");
+                member.unpublish(video);
+                console.log("unpublishVideo()が実行されました");
+            }
+            console.log("createUnpublishButton()を実行しました。");
+        }
+        const manualUnpublish = () => {
+            console.log("manualUnpublish()を実行します");
+            const inputId = document.getElementById("input-id");
+            const clearButton = document.getElementById("input-clear");
+            const manualAudio = document.getElementById("manual-audio");
+            const manualVideo = document.getElementById("manual-video");
+            const unpub = document.getElementById("manual-un");
+            unpub.onclick = () => {
+                console.log("unpub()を実行します");
+                member.unpublish(inputId.value);
+                console.log("unpub()を実行しました");
+            }
+            clearButton.onclick = () => {
+                console.log("clear()を実行します");
+                inputId.value = "";
+                console.log("clear()を実行しました");
+            }
+            console.log("manualUnpublish()を実行しました");
+        }
+
+        
+
+        createExitandCloseButton();
+        createRoomInformationButton();
+        createUnpublicationButton();
+        manualUnpublish();
+
         const subscribeAndAttach = (publication) => {
             if (publication.publisher.id === member.id) return;
     
@@ -215,6 +328,3 @@ const token = new SkyWayAuthToken({
     }
 
 })();
-
-
-

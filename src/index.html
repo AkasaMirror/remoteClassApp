@@ -14,19 +14,24 @@
       <div id="room-button-area">
         <button id="join">join</button>
       </div>
-      <div>
-        <button id="unpublish-video">unpublish video</button>
-        <button id="unpublish-audio">unpublish audio</button>
-      </div>
+      <div id="unpublication-area"></div>
       <div>
         <button id="videoButton">video off</button>
         <button id="audioButton">audio off</button>
+      </div>
+      <div id="manual-unpublish">
+        <input id="input-id" type="text">
+        <button id="input-clear">clear</button>
+        <button id="manual-audio">audio</button>
+        <button id="manual-video">video</button>
+        <button id="manual-un">unpub</button>
       </div>
     </div>
     <video id="local-video" muted playsinline></video>
     <div id="button-area"></div>
     <div id="remote-media-area"></div>
-    <script type="module" src="main.js"></script>
+    <div id="room-information-area"></div>
+    <script type="module" src="index.js"></script>
   </body>
 </html>
 
