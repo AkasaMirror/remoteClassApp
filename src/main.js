@@ -114,6 +114,7 @@ const token = new SkyWayAuthToken({
             ],
             maxSubscribers : 99,
         });
+        console.log(member);
         console.log("publish正常に実行されました。");
 
         const createExitandCloseButton = () => {
@@ -151,7 +152,6 @@ const token = new SkyWayAuthToken({
 
             console.log("createExitandCloseButton()が実行されました。");
         }
-
         const createRoomInformationButton = () => {
             console.log("createRoomInformationButton()を実行します。");
             if(roomInformationArea.firstChild) {
@@ -177,6 +177,7 @@ const token = new SkyWayAuthToken({
 
             publicationsButton.onclick = async () => {
                 console.log("publicationsボタンが押されました。");
+                console.log("publications : " + room.publications);
                 Object.keys(room.publications).forEach(function (key) {
                     console.log("room_publications :" + JSON.stringify(room.publications[key]));
                 });
@@ -200,7 +201,6 @@ const token = new SkyWayAuthToken({
             }
             console.log("createRoomInformationButton()が実行されました。");
         }
-
         const createUnpublicationButton = () => {
             console.log("createUnpublishButton()を実行します。");
             
@@ -242,36 +242,54 @@ const token = new SkyWayAuthToken({
             const manualAudio = document.getElementById("manual-audio");
             const manualVideo = document.getElementById("manual-video");
             const unpub = document.getElementById("manual-un");
+
             unpub.onclick = () => {
                 console.log("unpub()を実行します");
                 member.unpublish(inputId.value);
                 console.log("unpub()を実行しました");
             }
+
             clearButton.onclick = () => {
                 console.log("clear()を実行します");
                 inputId.value = "";
                 console.log("clear()を実行しました");
             }
+
             console.log("manualUnpublish()を実行しました");
         }
+        const manualUnsubscribe = () => {
+            console.log("manualUnsubscribe()を実行します");
+            const inputId = document.getElementById("input-id");
+            const unsub = document.getElementById("manual-unsub");
 
-        
+            unsub.onclick = () => {
+                console.log("unsub()を実行します");
+                member.unsubscribe(inputId.value);
+                console.log("unsub()を実行しました");
+            }
+
+            console.log("manualUnsubscribe()を実行しました");
+        }
 
         createExitandCloseButton();
         createRoomInformationButton();
         createUnpublicationButton();
         manualUnpublish();
+        manualUnsubscribe();
 
         const subscribeAndAttach = (publication) => {
             if (publication.publisher.id === member.id) return;
     
             const subscribeButton = document.createElement('button');
-            subscribeButton.textContent = `${publication.publisher.id}: ${publication.contentType}`;
+            const unsubscribeButton = document.createElement('button');
+
+            subscribeButton.textContent = `subscribe :  ${publication.publisher.id}: ${publication.contentType}`;
+            unsubscribeButton.textContent = `unsubscribe : ${publication.publisher.id}: ${publication.contentType}`;
             buttonArea.appendChild(subscribeButton);
+            buttonArea.appendChild(unsubscribeButton);
     
             subscribeButton.onclick = async () => {
                 const { stream } = await member.subscribe(publication.id);
-        
                 let newMedia;
                 switch (stream.track.kind) {
                     case 'video':
@@ -290,6 +308,26 @@ const token = new SkyWayAuthToken({
                 stream.attach(newMedia);
                 remoteMediaArea.appendChild(newMedia);
             };
+
+            unsubscribeButton.onclick = async () => {
+                const { stream } = await member.unsubscribe(subscription.id);
+                switch (stream.track.kind) {
+                    case 'video':
+                        newMedia = document.createElement('video');
+                        newMedia.playsInline = true;
+                        newMedia.autoplay = true;
+                        break;
+                    case 'audio':
+                        newMedia = document.createElement('audio');
+                        newMedia.controls = true;
+                        newMedia.autoplay = true;
+                        break;
+                    default:
+                        return;
+                }
+            }
+
+
         };
     
         room.publications.forEach(subscribeAndAttach);
