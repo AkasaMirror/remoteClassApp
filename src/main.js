@@ -557,17 +557,19 @@ const token = new SkyWayAuthToken({
 
             subscriptionsButton.onclick = async () => {
                 console.log("subscriptionsボタンが押されました。");
-                Object.keys(room.subscriptions).forEach(function (key) {
-                    console.log("room_subscriptions :" + JSON.stringify(room.subscriptions[key]));
-                });
+                // Object.keys(room.subscriptions).forEach(function (key) {
+                //     console.log("room_subscriptions :" + JSON.stringify(room.subscriptions[key]));
+                // });
+                console.log(JSON.stringify(room.subscriptions));
                 console.log("subscriptionsボタンが正常に実行されました。");
             }
 
             roomMemberButton.onclick = async () => {
                 console.log("room membersボタンが押されました。");
-                Object.keys(room.members).forEach(function (key) {
-                    console.log("room members :" + JSON.stringify(room.members[key]));
-                });
+                // Object.keys(room.members).forEach(function (key) {
+                //     console.log("room members :" + JSON.stringify(room.members[key]));
+                // });
+                console.log(JSON.stringify(room.members));
                 console.log("room membersボタンが正常に実行されました。");
             }
             console.log("createRoomInformationButton()が実行されました。");
