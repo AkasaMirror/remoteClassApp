@@ -662,7 +662,7 @@ const token = new SkyWayAuthToken({
             buttonArea.appendChild(unsubscribeButton);
     
             subscribeButton.onclick = async () => {
-                const { stream } = await member.subscribe(publication.id);
+                const { subscription, stream } = await member.subscribe(publication.id);
                 let newMedia;
                 switch (stream.track.kind) {
                     case 'video':
@@ -678,27 +678,30 @@ const token = new SkyWayAuthToken({
                     default:
                         return;
                 }
+                unsubscribeButton.onclick = async () => {
+                    member.unsubscribe(subscription.id);
+                }
                 stream.attach(newMedia);
                 remoteMediaArea.appendChild(newMedia);
             };
 
-            unsubscribeButton.onclick = async () => {
-                const { stream } = await member.unsubscribe(subscription.id);
-                switch (stream.track.kind) {
-                    case 'video':
-                        newMedia = document.createElement('video');
-                        newMedia.playsInline = true;
-                        newMedia.autoplay = true;
-                        break;
-                    case 'audio':
-                        newMedia = document.createElement('audio');
-                        newMedia.controls = true;
-                        newMedia.autoplay = true;
-                        break;
-                    default:
-                        return;
-                }
-            }
+            // unsubscribeButton.onclick = async () => {
+            //     const { stream } = await member.unsubscribe(subscription.id);
+            //     switch (stream.track.kind) {
+            //         case 'video':
+            //             newMedia = document.createElement('video');
+            //             newMedia.playsInline = true;
+            //             newMedia.autoplay = true;
+            //             break;
+            //         case 'audio':
+            //             newMedia = document.createElement('audio');
+            //             newMedia.controls = true;
+            //             newMedia.autoplay = true;
+            //             break;
+            //         default:
+            //             return;
+            //     }
+            // }
 
 
         };
