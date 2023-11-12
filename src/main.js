@@ -545,30 +545,30 @@ const token = new SkyWayAuthToken({
             roomInformationArea.appendChild(subscriptionsButton);
             roomInformationArea.appendChild(roomMemberButton);
 
-            publicationsButton.onclick = async () => {
+            publicationsButton.onclick = () => {
                 console.log("publicationsボタンが押されました。");
                 console.log("publications : " + room.publications);
-                // Object.keys(room.publications).forEach(function (key) {
-                //     console.log("room_publications :" + JSON.stringify(room.publications[key]));
-                // });
+                Object.keys(room.publications).forEach(function (key) {
+                    console.log("room_publications :" + JSON.stringify(room.publications[key]));
+                });
                 console.log(JSON.stringify(room.publications));
                 console.log("publicationsボタンが正常に実行されました。");
             }
 
-            subscriptionsButton.onclick = async () => {
+            subscriptionsButton.onclick = () => {
                 console.log("subscriptionsボタンが押されました。");
-                // Object.keys(room.subscriptions).forEach(function (key) {
-                //     console.log("room_subscriptions :" + JSON.stringify(room.subscriptions[key]));
-                // });
+                Object.keys(room.subscriptions).forEach(function (key) {
+                    console.log("room_subscriptions :" + JSON.stringify(room.subscriptions[key]));
+                });
                 console.log(JSON.stringify(room.subscriptions));
                 console.log("subscriptionsボタンが正常に実行されました。");
             }
 
-            roomMemberButton.onclick = async () => {
+            roomMemberButton.onclick = () => {
                 console.log("room membersボタンが押されました。");
-                // Object.keys(room.members).forEach(function (key) {
-                //     console.log("room members :" + JSON.stringify(room.members[key]));
-                // });
+                Object.keys(room.members).forEach(function (key) {
+                    console.log("room members :" + JSON.stringify(room.members[key]));
+                });
                 console.log(JSON.stringify(room.members));
                 console.log("room membersボタンが正常に実行されました。");
             }
