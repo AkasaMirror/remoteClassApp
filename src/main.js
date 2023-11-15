@@ -311,6 +311,7 @@ const token = new SkyWayAuthToken({
                 }
                 unsubscribeButton.onclick = async () => {
                     member.unsubscribe(subscription.id);
+                    newMedia.remove();
                 }
                 stream.attach(newMedia);
                 remoteMediaArea.appendChild(newMedia);
