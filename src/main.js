@@ -331,18 +331,22 @@ const token = new SkyWayAuthToken({
         };
 
         const deleteSubscribeAndUnsubscribe = (member) => {
-            console.log("イベントが発火されました。")
+            console.log("イベントが発火されました。");
+
+            console.log("member : " + member);
             let buttons = document.getElementsByClassName(member.id);
             let buttons_2 = document.getElementsByClassName(member.id + "_remoteMedia");
 
-            console.log(buttons);
-            console.log(buttons_2)
+            console.log("buttonArea : " + buttonArea);
+
+            console.log("buttons" + buttons);
+            console.log("buttons_2" + buttons_2)
             for(let i=0, len=buttons.length; i < len; i++){
-                buttonArea.removeChild(buttonArea.buttons[i]);
+                buttons[i].remove();
             }
 
             for(let i=0, len=buttons_2.length; i < len; i++){
-                buttonArea.removeChild(buttonArea.buttons_2[i]);
+                buttons_2[i].remove();
             }
             
             
