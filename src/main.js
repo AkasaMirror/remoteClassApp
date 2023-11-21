@@ -289,10 +289,16 @@ const token = new SkyWayAuthToken({
 
             subscribeButton.textContent = `subscribe :  ${publication.publisher.id}: ${publication.contentType}`;
             unsubscribeButton.textContent = `unsubscribe : ${publication.publisher.id}: ${publication.contentType}`;
+
+            subscribeButton.className = `${publication.publisher.id}`;
+            unsubscribeButton.className = `${publication.publisher.id}`;
+
+
             buttonArea.appendChild(subscribeButton);
             buttonArea.appendChild(unsubscribeButton);
     
             subscribeButton.onclick = async () => {
+                console.log("sunscribeButton()が押されました。");
                 const { subscription, stream } = await member.subscribe(publication.id);
                 let newMedia;
                 switch (stream.track.kind) {
@@ -311,15 +317,37 @@ const token = new SkyWayAuthToken({
                         return;
                 }
                 unsubscribeButton.onclick = async () => {
+                    console.log("unsunscribeButton()が押されました。");
                     member.unsubscribe(subscription.id);
                     newMedia.remove();
+                    console.log("unsunscribeButton()が正常に実行されました。");
                 }
                 stream.attach(newMedia);
                 remoteMediaArea.appendChild(newMedia);
+                console.log("sunscribeButton()が実行されました。");
             };
 
         };
-    
+
+        const deleteSubscribeAndUnsubscribe = (member) => {
+            console.log("イベントが発火されました。")
+            let buttons = document.getElementsByClassName(member.id);
+            console.log(buttons);
+
+            for(let i =0, len = roomInformationArea.children.length; i < len; i++){
+
+                if (member.id == buttonArea.childNodes[i].className) {
+                    buttonArea.removeChild(buttonArea.childNodes[i]);
+                }
+                console.log("先に生成された子ノードを削除しました");
+            }
+            console.log("イベントの発火が終了しました。");
+
+        }
+        
+        room.onMemberLeft.add((e) => deleteSubscribeAndUnsubscribe(e.member));
+        room.onClosed.add((e) => deleteSubscribeAndUnsubscribe(e.member));
+
         room.publications.forEach(subscribeAndAttach);
         room.onStreamPublished.add((e) => subscribeAndAttach(e.publication));
     };
