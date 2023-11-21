@@ -305,6 +305,7 @@ const token = new SkyWayAuthToken({
                         newMedia = document.createElement('audio');
                         newMedia.controls = true;
                         newMedia.autoplay = true;
+                        unsubscribeButton.style.display = "none";
                         break;
                     default:
                         return;
