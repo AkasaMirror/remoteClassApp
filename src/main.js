@@ -335,18 +335,21 @@ const token = new SkyWayAuthToken({
 
             console.log("member : " + member);
             let buttons = document.getElementsByClassName(member.id);
-            let buttons_2 = document.getElementsByClassName(member.id + "_remoteMedia");
+            let remoteMedias = document.getElementsByClassName(member.id + "_remoteMedia");
 
-            console.log("buttonArea : " + buttonArea);
+            console.log("buttonArea : ");
+            console.log(buttonArea);
 
             console.log("buttons" + buttons);
-            console.log("buttons_2" + buttons_2)
             for(let i=0, len=buttons.length; i < len; i++){
+                console.log(buttons[i]);
                 buttons[i].remove();
             }
 
-            for(let i=0, len=buttons_2.length; i < len; i++){
-                buttons_2[i].remove();
+
+            for(let i=0, len=remoteMedias.length; i < len; i++){
+                console.log(remoteMedias[i]);
+                remoteMedias[i].remove();
             }
             
             
