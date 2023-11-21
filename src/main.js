@@ -291,6 +291,7 @@ const token = new SkyWayAuthToken({
             unsubscribeButton.textContent = `unsubscribe : ${publication.publisher.id}: ${publication.contentType}`;
             buttonArea.appendChild(subscribeButton);
             buttonArea.appendChild(unsubscribeButton);
+            unsubscribeButton.style.display = "none";
     
             subscribeButton.onclick = async () => {
                 const { subscription, stream } = await member.subscribe(publication.id);
@@ -305,7 +306,6 @@ const token = new SkyWayAuthToken({
                         newMedia = document.createElement('audio');
                         newMedia.controls = true;
                         newMedia.autoplay = true;
-                        unsubscribeButton.style.display = "none";
                         break;
                     default:
                         return;
