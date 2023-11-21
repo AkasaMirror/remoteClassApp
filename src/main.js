@@ -322,6 +322,7 @@ const token = new SkyWayAuthToken({
                     newMedia.remove();
                     console.log("unsunscribeButton()が正常に実行されました。");
                 }
+                newMedia.className = `${publication.publisher.id}_remoteMedia`;
                 stream.attach(newMedia);
                 remoteMediaArea.appendChild(newMedia);
                 console.log("sunscribeButton()が実行されました。");
@@ -332,15 +333,19 @@ const token = new SkyWayAuthToken({
         const deleteSubscribeAndUnsubscribe = (member) => {
             console.log("イベントが発火されました。")
             let buttons = document.getElementsByClassName(member.id);
+            let buttons_2 = document.getElementsByClassName(member.id + "_remoteMedia");
+
             console.log(buttons);
-
-            for(let i =0, len = roomInformationArea.children.length; i < len; i++){
-
-                if (member.id == buttonArea.childNodes[i].className) {
-                    buttonArea.removeChild(buttonArea.childNodes[i]);
-                }
-                console.log("先に生成された子ノードを削除しました");
+            console.log(buttons_2)
+            for(let i=0, len=buttons.length; i < len; i++){
+                buttonArea.removeChild(buttonArea.buttons[i]);
             }
+
+            for(let i=0, len=buttons_2.length; i < len; i++){
+                buttonArea.removeChild(buttonArea.buttons_2[i]);
+            }
+            
+            
             console.log("イベントの発火が終了しました。");
 
         }
