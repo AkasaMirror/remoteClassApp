@@ -304,6 +304,8 @@ const token = new SkyWayAuthToken({
             subscribeButton.onclick = async () => {
                 console.log("subscribeButton()が押されました。");
                 const { subscription, stream } = await member.subscribe(publication.id);
+                console.log("subscription : ");
+                console.log(subscription);
                 let newMedia;
                 switch (stream.track.kind) {
                     case 'video':
