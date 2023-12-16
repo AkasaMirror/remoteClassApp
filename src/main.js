@@ -260,7 +260,16 @@ const token = new SkyWayAuthToken({
             }
             subsc.onclick = async () => {
                 console.log("subsc()を実行します");
-                await member.subscribe(inputId.value);
+                const { subscription, stream } = member.subscribe(inputId.value);
+                let audioMedia;
+                audioMedia = document.createElement('audio');
+                audioMedia.controls = true;
+                audioMedia.autoplay = true;
+                audioMedia.style.display = "none";
+                stream.attach(newMedia);
+                remoteMediaArea.appendChild(newMedia);
+                console.log("audio_subscription_ID : ");
+                console.log(subscription.id);
                 console.log("subsc()を実行しました");
             }
 
