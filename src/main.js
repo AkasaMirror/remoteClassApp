@@ -106,8 +106,8 @@ const token = new SkyWayAuthToken({
 
         console.log("publishを試みます。");
 
-        await member.publish(audio);
-        await member.publish(video, {
+        const publication_audio = await member.publish(audio);
+        const publication_video = await member.publish(video, {
             encodings: [
               // 複数のパラメータをセットする
               { maxBitrate: 10_000, scaleResolutionDownBy: 8 },
@@ -115,6 +115,10 @@ const token = new SkyWayAuthToken({
             ],
             maxSubscribers : 99,
         });
+        console.log("以下のものはaudioの情報");
+        console.log(publication_audio);
+        console.log("以下のものはvideoの情報")
+        console.log(publication_video)
         console.log(member);
         console.log("publish正常に実行されました。");
 
@@ -298,7 +302,7 @@ const token = new SkyWayAuthToken({
             buttonArea.appendChild(unsubscribeButton);
     
             subscribeButton.onclick = async () => {
-                console.log("sunscribeButton()が押されました。");
+                console.log("subscribeButton()が押されました。");
                 const { subscription, stream } = await member.subscribe(publication.id);
                 let newMedia;
                 switch (stream.track.kind) {
@@ -325,7 +329,7 @@ const token = new SkyWayAuthToken({
                 newMedia.className = `${publication.publisher.id}_remoteMedia`;
                 stream.attach(newMedia);
                 remoteMediaArea.appendChild(newMedia);
-                console.log("sunscribeButton()が実行されました。");
+                console.log("subscribeButton()が実行されました。");
             };
 
         };
