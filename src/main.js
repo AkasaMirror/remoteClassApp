@@ -267,7 +267,7 @@ const token = new SkyWayAuthToken({
                 audioMedia.autoplay = true;
                 audioMedia.style.display = "none";
                 stream.attach(newMedia);
-                remoteMediaArea.appendChild(newMedia);
+                remoteMediaArea.appendChild(audioMedia);
                 console.log("audio_subscription_ID : ");
                 console.log(subscription.id);
                 console.log("subsc()を実行しました");
