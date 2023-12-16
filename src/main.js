@@ -285,8 +285,12 @@ const token = new SkyWayAuthToken({
         manualUnpublish();
         manualUnsubscribe();
 
-        const subscribeAndAttach = (publication) => {
-            if (publication.publisher.id === member.id) return;
+        const subscribeAndAttach = async (publication) => {
+            if (publication.publisher.id === member.id) {
+                const { subscription, stream } = await member.subscribe(publication.id);
+                console.log(subscription);
+                return;
+            };
     
             const subscribeButton = document.createElement('button');
             const unsubscribeButton = document.createElement('button');
