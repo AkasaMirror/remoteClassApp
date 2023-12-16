@@ -183,6 +183,7 @@ const token = new SkyWayAuthToken({
             publicationsButton.onclick = () => {
                 console.log("publicationsボタンが押されました。");
                 console.log("publications : " + room.publications);
+                console.log(room.publications);
                 Object.keys(room.publications).forEach(function (key) {
                     console.log("room_publications :" + JSON.stringify(room.publications[key]));
                 });
@@ -249,12 +250,18 @@ const token = new SkyWayAuthToken({
             const clearButton = document.getElementById("input-clear");
             const manualAudio = document.getElementById("manual-audio");
             const manualVideo = document.getElementById("manual-video");
+            const subsc = document.getElementById("manual-sub");
             const unpub = document.getElementById("manual-un");
 
             unpub.onclick = () => {
                 console.log("unpub()を実行します");
                 member.unpublish(inputId.value);
                 console.log("unpub()を実行しました");
+            }
+            subsc.onclick = async () => {
+                console.log("subsc()を実行します");
+                await member.subscribe(inputId.value);
+                console.log("subsc()を実行しました");
             }
 
             clearButton.onclick = () => {
