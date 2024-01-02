@@ -3,6 +3,8 @@ import { nowInSec, SkyWayAuthToken, SkyWayContext, SkyWayRoom, SkyWayStreamFacto
 const videoButton = document.getElementById("videoButton");
 const audioButton = document.getElementById("audioButton");
 
+const audio_slider = document.getElementById("volume-slider");
+
 const token = new SkyWayAuthToken({
     jti: uuidV4(),
     iat: nowInSec(),
@@ -338,6 +340,11 @@ const token = new SkyWayAuthToken({
                         newMedia.controls = true;
                         newMedia.autoplay = true;
                         newMedia.style.display = "none";
+
+                        audio_slider.addEventListener("input", () => {
+                            newMedia.volume = audio_slider.value;
+                        });
+                        
                         break;
                     default:
                         return;
